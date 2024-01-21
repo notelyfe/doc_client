@@ -1,0 +1,23 @@
+.createUserForm{
+    width: 400px !important;
+}
+
+.passwordDiv{
+    position: relative !important;
+}
+
+.indicator{
+    font-size: 14px !important;
+    position: absolute;
+    top: 40px;
+    left: 300px;
+    cursor: pointer;
+}
+
+.indicator:hover{
+    text-decoration: underline;
+}
+
+.loginLink{
+    margin-left: 15px !important;
+}
