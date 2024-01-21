@@ -2,14 +2,16 @@ import React, { useContext, useState } from 'react'
 import Login from '../Components/Auth/login'
 import api from '../Services/api'
 import toast from 'react-hot-toast'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import Context from '../Context/Context'
 
 const LoginPage = () => {
 
   const [data, setData] = useState({ email: "", password: "" })
-
-  const {accessToken, setAccessToken, userData, setUserData} = useContext(Context)
+  const { setAccessToken, setUserData } = useContext(Context)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/'
 
   const login = async (e) => {
     e.preventDefault()
@@ -26,11 +28,12 @@ const LoginPage = () => {
         }
       })
 
-      if(userRes.status === 200){
+      if (userRes.status === 200) {
         setUserData(userRes?.data)
-        toast.success("Login Sucess",{
+        toast.success("Login Sucess", {
           duration: 4000
         })
+        navigate(from, { replace: true })
       }
 
     } catch (error) {
