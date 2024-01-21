@@ -21,7 +21,7 @@ function App() {
           {/* protected routes */}
           <Route element={<RequireAuth />}>
             <Route path='/' element={<Home />} />
-            <Route path='/canva/:docId' element={<CanvaPage />} />
+            <Route path='/canva/:name/:docId' element={<CanvaPage />} />
           </Route>
         </Route>
       </Routes>

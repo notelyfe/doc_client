@@ -8,8 +8,6 @@ const CanvaPage = () => {
 
     let params = useParams()
 
-    console.log(params?.docId)
-
     return (
         <>
             <Header />

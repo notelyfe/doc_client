@@ -8,7 +8,7 @@ import Context from '../Context/Context'
 const LoginPage = () => {
 
   const [data, setData] = useState({ email: "", password: "" })
-  const { setAccessToken, setUserData } = useContext(Context)
+  const { setAccessToken, setUserData, setAllDocs } = useContext(Context)
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
@@ -34,6 +34,16 @@ const LoginPage = () => {
           duration: 4000
         })
         navigate(from, { replace: true })
+      }
+
+      const docRes = await api.get("/api/doc/getAllDocs", {
+        headers: {
+          Authorization: `Bearer ${access_token}`
+        }
+      })
+
+      if(docRes.status === 200){
+        setAllDocs(docRes?.data)
       }
 
     } catch (error) {
