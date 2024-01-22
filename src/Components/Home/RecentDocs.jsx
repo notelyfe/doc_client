@@ -9,7 +9,7 @@ import Share from './Share'
 const RecentDocs = () => {
 
     const { allDocs, userData, setAllDocs, accessToken } = useContext(Context)
-    const [share, setShare] = useState({state: false, id: ""})
+    const [share, setShare] = useState({ state: false, id: "" })
 
     const deleteDoc = async (id) => {
         setAllDocs(
@@ -60,8 +60,12 @@ const RecentDocs = () => {
                                     </p>
                                 </div>
                                 <div className='d-flex'>
-                                    <h5 onClick={() => setShare({state: true, id: item._id})} className={` ${style.deleteBtn} m-0 text-primary px-2`}>&#8631;</h5>
-                                    <h5 onClick={() => deleteDoc(item._id)} className={` ${style.deleteBtn} m-0 text-danger px-2`}>&times;</h5>
+                                    <abbr title="share">
+                                        <h5 onClick={() => setShare({ state: true, id: item._id })} className={` ${style.deleteBtn} m-0 text-primary px-2`}>&#8631;</h5>
+                                    </abbr>
+                                    <abbr title="delete">
+                                        <h5 onClick={() => deleteDoc(item._id)} className={` ${style.deleteBtn} m-0 text-danger px-2`}>&times;</h5>
+                                    </abbr>
                                 </div>
                             </div>
                         )
