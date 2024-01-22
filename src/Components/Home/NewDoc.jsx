@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 const NewDoc = () => {
 
     const navigate = useNavigate()
-    const { accessToken, setDoc } = useContext(Context)
+    const { accessToken, setDoc, setAllDocs, allDocs } = useContext(Context)
 
     const createDoc = async () => {
 
@@ -25,6 +25,7 @@ const NewDoc = () => {
                     duration: 4000,
                 })
                 setDoc(res.data)
+                setAllDocs([...allDocs, res?.data])
                 navigate(`/canva/${res.data.doc_name}/${res.data._id}`)
             }
 
