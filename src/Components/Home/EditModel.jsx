@@ -25,7 +25,7 @@ const EditModel = ({ setEdit, edit }) => {
 
         setOtherOwners(data)
 
-    }, [searchText, allDocs])
+    }, [searchText, allDocs, edit.id])
 
     const updatePermission = async (docId, user) => {
         const res = await api.patch("/api/doc/editPermission", { docId, user }, {

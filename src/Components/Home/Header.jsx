@@ -23,7 +23,7 @@ const Header = ({ docName, setDocName, setAllDocs, allDocs }) => {
 
         return () => clearTimeout(clearTime)
 
-    }, [docName])
+    }, [docName, onchangeState])
 
     const editName = async (val) => {
         try {

@@ -46,7 +46,7 @@ const Canva = () => {
             })
         }
 
-    }, [allDocs, quill])
+    }, [allDocs, quill, userData._id, docId])
 
     useEffect(() => {
 

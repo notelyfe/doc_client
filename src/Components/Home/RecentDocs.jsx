@@ -67,9 +67,11 @@ const RecentDocs = () => {
                                             <h5 onClick={() => setEdit({ state: true, id: item._id })} className={` ${style.deleteBtn} m-0 text-primary px-2`}>&#9998;</h5>
                                         </abbr>
                                     )}
-                                    <abbr title="share">
-                                        <h5 onClick={() => setShare({ state: true, id: item._id })} className={` ${style.deleteBtn} m-0 text-primary px-2`}>&#8631;</h5>
-                                    </abbr>
+                                    {userData?._id === item.created_by && (
+                                        <abbr title="share">
+                                            <h5 onClick={() => setShare({ state: true, id: item._id })} className={` ${style.deleteBtn} m-0 text-primary px-2`}>&#8631;</h5>
+                                        </abbr>
+                                    )}
                                     <abbr title="delete">
                                         <h5 onClick={() => deleteDoc(item._id)} className={` ${style.deleteBtn} m-0 text-danger px-2`}>&times;</h5>
                                     </abbr>
