@@ -30,9 +30,7 @@ const LoginPage = () => {
 
       if (userRes.status === 200) {
         setUserData(userRes?.data)
-        toast.success("Login Sucess", {
-          duration: 4000
-        })
+        toast.success("Login Sucess")
         navigate(from, { replace: true })
       }
 
@@ -47,9 +45,7 @@ const LoginPage = () => {
       }
 
     } catch (error) {
-      toast.error(error?.response?.data?.msg, {
-        duration: 4000,
-      })
+      toast.error(error?.response?.data?.msg)
     }
   }
 

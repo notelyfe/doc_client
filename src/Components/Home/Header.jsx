@@ -1,12 +1,53 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import style from "../../Style/home.module.css"
 import Context from '../../Context/Context'
 import { Link, useParams } from 'react-router-dom'
+import api from "../../Services/api"
+import toast from 'react-hot-toast'
 
-const Header = ({ docName, setDocName }) => {
+const Header = ({ docName, setDocName, setAllDocs, allDocs }) => {
 
-    const { userData } = useContext(Context)
-    let { name } = useParams()
+    const { userData, accessToken } = useContext(Context)
+    let { name, docId } = useParams()
+    const [onchangeState, setOnchangeState] = useState(false)
+
+    useEffect(() => {
+
+        let clearTime = setTimeout(() => {
+            if (onchangeState === true) {
+                editName(docName)
+            }
+            setOnchangeState(false)
+        }, [5000]);
+
+        return () => clearTimeout(clearTime)
+
+    }, [docName])
+
+    const editName = async (val) => {
+        try {
+            const res = await api.put("/api/doc/editName", { doc_id: docId, name: val }, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            })
+
+            if (res?.status === 200) {
+                toast.success(res?.data?.msg)
+                let newName = allDocs.map(item => {
+                    if (item._id === docId) {
+                        return { ...item, doc_name: val }
+                    } else {
+                        return item
+                    }
+                })
+                setAllDocs(newName)
+            }
+
+        } catch (error) {
+            toast.error(error?.response?.data?.msg)
+        }
+    }
 
     return (
         <>
@@ -14,7 +55,10 @@ const Header = ({ docName, setDocName }) => {
                 <div className="container d-flex align-items-center w-25 mx-0">
                     {name && <input
                         value={docName}
-                        onChange={(e) => setDocName(e.target.value)}
+                        onChange={(e) => {
+                            setDocName(e.target.value)
+                            setOnchangeState(true)
+                        }}
                         type="text"
                         className={` ${style.nameInput} form-control bg-primary text-light`}
                     />}
