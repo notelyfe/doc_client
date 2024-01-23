@@ -5,11 +5,13 @@ import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import api from '../../Services/api'
 import Share from './Share'
+import EditModel from './EditModel'
 
 const RecentDocs = () => {
 
     const { allDocs, userData, setAllDocs, accessToken } = useContext(Context)
     const [share, setShare] = useState({ state: false, id: "" })
+    const [edit, setEdit] = useState({ state: false, id: "" })
 
     const deleteDoc = async (id) => {
         setAllDocs(
@@ -60,6 +62,11 @@ const RecentDocs = () => {
                                     </p>
                                 </div>
                                 <div className='d-flex'>
+                                    {item.created_by === userData?._id && (
+                                        <abbr title="Edit Permission">
+                                            <h5 onClick={() => setEdit({ state: true, id: item._id })} className={` ${style.deleteBtn} m-0 text-primary px-2`}>&#9998;</h5>
+                                        </abbr>
+                                    )}
                                     <abbr title="share">
                                         <h5 onClick={() => setShare({ state: true, id: item._id })} className={` ${style.deleteBtn} m-0 text-primary px-2`}>&#8631;</h5>
                                     </abbr>
@@ -78,6 +85,7 @@ const RecentDocs = () => {
                 setShare={setShare}
                 share={share}
             />}
+            {edit?.state === true && <EditModel setEdit={setEdit} edit={edit} />}
         </>
     )
 }

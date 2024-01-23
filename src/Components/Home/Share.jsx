@@ -27,9 +27,9 @@ const Share = ({ setShare, share }) => {
                 }
             })
 
-            if(res.status===200){
+            if (res.status === 200) {
                 toast.success(res.data.msg)
-                setShare({state: false, id: ""})
+                setShare({ state: false, id: "" })
             }
 
         } catch (error) {
@@ -39,31 +39,34 @@ const Share = ({ setShare, share }) => {
 
 
     return (
-        <div className={` ${style.shareWrapper} container w-50 rounded p-1`}>
-            <div className="container p-3 d-flex align-items-center justify-content-between">
-                <input
-                    type="email"
-                    className='form-control mx-1'
-                    placeholder='Email '
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                />
-                <button onClick={() => setShare({ state: false, id: "" })} className="btn btn-primary mx-1">&times;</button>
+        <>
+            <div className={`${style.shareMainWrapper} bg-dark`}></div>
+            <div className={` ${style.shareWrapper} container w-50 rounded p-1`}>
+                <div className="container p-3 d-flex align-items-center justify-content-between">
+                    <input
+                        type="email"
+                        className='form-control mx-1'
+                        placeholder='Email '
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
+                    <button onClick={() => setShare({ state: false, id: "" })} className="btn btn-danger mx-1">&times;</button>
+                </div>
+                <div className="form-check mx-4">
+                    <input
+                        className="form-check-input"
+                        type="radio"
+                        name="exampleRadios"
+                        id="exampleRadios1"
+                        onChange={(e) => setPermission(e.target.checked)}
+                        value={permission} />
+                    <label className="form-check-label" htmlFor="exampleRadios1">
+                        Write Permission
+                    </label>
+                </div>
+                <button onClick={shareWith} className="btn btn-success mx-4 my-2">Share</button>
             </div>
-            <div className="form-check mx-4">
-                <input
-                    className="form-check-input"
-                    type="radio"
-                    name="exampleRadios"
-                    id="exampleRadios1"
-                    onChange={(e) => setPermission(e.target.checked)}
-                    value={permission} />
-                <label className="form-check-label" htmlFor="exampleRadios1">
-                    Write Permission
-                </label>
-            </div>
-            <button onClick={shareWith} className="btn btn-success mx-4 my-2">Share</button>
-        </div>
+        </>
     )
 }
 

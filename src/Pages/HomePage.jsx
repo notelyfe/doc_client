@@ -4,6 +4,7 @@ import Header from '../Components/Home/Header'
 import RecentDocs from '../Components/Home//RecentDocs'
 
 const HomePage = () => {
+
     return (
         <>
             <Header />

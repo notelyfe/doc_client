@@ -1,9 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import "../../Style/quil.css"
 import Quill from 'quill'
 import "quill/dist/quill.snow.css"
 import io from 'socket.io-client'
 import { useParams } from 'react-router-dom'
+import Context from '../../Context/Context'
+import toast from 'react-hot-toast'
 
 const TOOLBAR_OPTIONS = [
     [{ header: [1, 2, 3, 4, 5, 6, false] }],
@@ -22,6 +24,29 @@ const Canva = () => {
     let { docId } = useParams()
     const [socket, setSocket] = useState()
     const [quill, setQuill] = useState()
+    const { allDocs, userData } = useContext(Context)
+
+    useEffect(() => {
+
+        if (allDocs == null || quill == null) return
+
+        let currentDoc = allDocs?.filter(item => {
+            return item._id === docId
+        })
+
+        let usr = currentDoc[0]?.other_owners?.filter(item => {
+            return item.user === userData._id
+        })
+
+        if (currentDoc[0]?.created_by === userData._id || usr[0]?.write_permission === true) {
+            quill.enable()
+        } else {
+            toast.error("You don't have write permission to this document", {
+                duration: 4000,
+            })
+        }
+
+    }, [allDocs, quill])
 
     useEffect(() => {
 
@@ -70,7 +95,6 @@ const Canva = () => {
 
         socket.once("load-document", doc => {
             quill.setContents(doc)
-            quill.enable()
         })
 
         socket.emit("get-document", docId)
