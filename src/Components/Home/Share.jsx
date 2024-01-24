@@ -9,9 +9,12 @@ const Share = ({ setShare, share }) => {
     const [email, setEmail] = useState("")
     const [permission, setPermission] = useState(false)
     const { accessToken } = useContext(Context)
+    const [loading, setLoading] = useState(false)
 
     const shareWith = async () => {
         try {
+
+            setLoading(true)
 
             let data = {
                 doc_id: share.id,
@@ -27,6 +30,8 @@ const Share = ({ setShare, share }) => {
                 }
             })
 
+            setLoading(false)
+
             if (res.status === 200) {
                 toast.success(res.data.msg)
                 setShare({ state: false, id: "" })
@@ -34,6 +39,7 @@ const Share = ({ setShare, share }) => {
 
         } catch (error) {
             toast.error(error?.response?.data?.msg)
+            setLoading(false)
         }
     }
 
@@ -64,8 +70,14 @@ const Share = ({ setShare, share }) => {
                         Write Permission
                     </label>
                 </div>
-                <button onClick={shareWith} className="btn btn-success mx-4 my-2">Share</button>
-            </div>
+                {loading === true ? (
+                    <button class="btn btn-success mx-4 my-2" type="button">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    </button>
+                ) : (
+                    <button onClick={shareWith} className="btn btn-success mx-4 my-2">Share</button>
+                )}
+            </div >
         </>
     )
 }

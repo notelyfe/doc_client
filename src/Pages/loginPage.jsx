@@ -12,10 +12,13 @@ const LoginPage = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
+  const [loading, setLoading] = useState(false)
 
   const login = async (e) => {
     e.preventDefault()
     try {
+
+      setLoading(true)
 
       const res = await api.post("/api/auth/login", data)
       setAccessToken(res?.data?.access_token)
@@ -32,6 +35,7 @@ const LoginPage = () => {
         setUserData(userRes?.data)
         toast.success("Login Sucess")
         navigate(from, { replace: true })
+        setLoading(false)
       }
 
       const docRes = await api.get("/api/doc/getAllDocs", {
@@ -40,12 +44,13 @@ const LoginPage = () => {
         }
       })
 
-      if(docRes.status === 200){
+      if (docRes.status === 200) {
         setAllDocs(docRes?.data)
       }
 
     } catch (error) {
       toast.error(error?.response?.data?.msg)
+      setLoading(false)
     }
   }
 
@@ -54,6 +59,7 @@ const LoginPage = () => {
       data={data}
       setData={setData}
       login={login}
+      loading={loading}
     />
   )
 }

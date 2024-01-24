@@ -9,6 +9,7 @@ const EditModel = ({ setEdit, edit }) => {
     const { allDocs, accessToken } = useContext(Context)
     const [otherOwners, setOtherOwners] = useState(null)
     const [searchText, setSearchText] = useState("")
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         let currentDoc = allDocs?.filter(item => {
@@ -28,11 +29,13 @@ const EditModel = ({ setEdit, edit }) => {
     }, [searchText, allDocs, edit.id])
 
     const updatePermission = async (docId, user) => {
+        setLoading(true)
         const res = await api.patch("/api/doc/editPermission", { docId, user }, {
             headers: {
                 Authorization: `Bearer ${accessToken}`
             }
         })
+        setLoading(false)
 
         if (res.status === 200) {
             toast.success("Permission Edited")
@@ -69,7 +72,13 @@ const EditModel = ({ setEdit, edit }) => {
                                             <h4 className='m-0 mx-2 text-success'>&#128366;</h4>
                                         </abbr>
                                     </div>
-                                    <button onClick={() => updatePermission(edit.id, item.user)} className="btn btn-sm btn-success m-1">Update</button>
+                                    {loading === true ? (
+                                        <button class="btn btn-success" type="button">
+                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        </button>
+                                    ) : (
+                                        <button onClick={() => updatePermission(edit.id, item.user)} className="btn btn-sm btn-success m-1">Update</button>
+                                    )}
                                 </div>
                             )
                         })

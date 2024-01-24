@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import style from '../../Style/auth.module.css'
 import { Link } from 'react-router-dom'
 
-const Signup = ({ data, setData, handelRegistration }) => {
+const Signup = ({ data, setData, handelRegistration, loading }) => {
 
   const [hide, setHide] = useState(false)
 
@@ -77,7 +77,13 @@ const Signup = ({ data, setData, handelRegistration }) => {
             {!hide ? "show" : "hide"}
           </p>
         </div>
-        <button type="submit" className="btn btn-primary mb-3">Submit</button>
+        {loading === true ? (
+          <button class="btn btn-primary" type="button" >
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+        ) : (
+          <button type="submit" className="btn btn-primary mb-3">Submit</button>
+        )}
 
         <div>
           <p className='mb-0'>
@@ -86,7 +92,7 @@ const Signup = ({ data, setData, handelRegistration }) => {
           </p>
         </div>
       </form>
-    </div>
+    </div >
   )
 }
 

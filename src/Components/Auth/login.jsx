@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import style from "../../Style/auth.module.css"
 import { Link } from 'react-router-dom'
 
-const Login = ({ data, setData, login }) => {
+const Login = ({ data, setData, login, loading }) => {
 
   const [hide, setHide] = useState(false)
 
@@ -47,7 +47,13 @@ const Login = ({ data, setData, login }) => {
             {!hide ? "show" : "hide"}
           </p>
         </div>
-        <button type="submit" className="btn btn-primary mb-3">Login</button>
+        {loading === true ? (
+          <button class="btn btn-primary" type="button">
+            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          </button>
+        ) : (
+          <button type="submit" className="btn btn-primary mb-3">Login</button>
+        )}
 
         <div>
           <p className='mb-0'>
