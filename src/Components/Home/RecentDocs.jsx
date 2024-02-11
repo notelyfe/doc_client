@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import style from "../../Style/home.module.css"
 import Context from '../../Context/Context'
 import { Link } from 'react-router-dom'
@@ -6,38 +6,71 @@ import toast from 'react-hot-toast'
 import api from '../../Services/api'
 import Share from './Share'
 import EditModel from './EditModel'
+import useRefreshToken from "../../Hooks/useRefreshToken"
 
 const RecentDocs = () => {
 
-    const { allDocs, userData, setAllDocs, accessToken } = useContext(Context)
+    const { allDocs, userData, setAllDocs } = useContext(Context)
     const [share, setShare] = useState({ state: false, id: "" })
     const [edit, setEdit] = useState({ state: false, id: "" })
+    const refresh = useRefreshToken()
 
     const deleteDoc = async (id) => {
-        setAllDocs(
-            allDocs?.filter(item => {
-                return item._id !== id
-            })
-        )
 
         try {
 
+            let token = await refresh()
+
+            if (!token) return
+
             const res = await api.delete(`/api/doc/deleteDoc/${id}`, {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${token}`
                 }
             })
 
             if (res.status === 200) {
-                toast.success(res?.data?.msg, {
+                setAllDocs(
+                    allDocs?.filter(item => {
+                        return item._id !== id
+                    })
+                )
+                toast.success(res?.data?.message, {
                     duration: 4000,
                 })
             }
 
         } catch (error) {
-            toast.error(error?.response?.data?.msg)
+            toast.error(error?.response?.data?.message)
         }
     }
+
+    useEffect(() => {
+
+        const getAllDocs = async () => {
+            try {
+
+                let token = await refresh()
+
+                if (!token) return
+
+                const res = await api.get("/api/doc/getAllDocs", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+
+                if (res.status === 200) {
+                    setAllDocs(res?.data)
+                }
+            } catch (error) {
+                toast.error(error?.response?.data?.message)
+            }
+        }
+
+        getAllDocs()
+
+    }, [])
 
     return (
         <>

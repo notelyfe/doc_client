@@ -2,30 +2,34 @@ import React, { useContext, useState } from 'react'
 import style from "../../Style/home.module.css"
 import Context from '../../Context/Context'
 import { useNavigate } from 'react-router-dom'
-import api from "../../Services/api"
 import toast from 'react-hot-toast'
+import useRefreshToken from "../../Hooks/useRefreshToken"
+import api from '../../Services/api'
 
 const NewDoc = () => {
 
     const navigate = useNavigate()
-    const { accessToken, setDoc, setAllDocs, allDocs } = useContext(Context)
+    const refresh = useRefreshToken()
+    const { setDoc, setAllDocs, allDocs } = useContext(Context)
     const [loading, setLoading] = useState(false)
 
     const createDoc = async () => {
 
-        if(loading === true) return
+        if (loading === true) return
 
         try {
 
             setLoading(true)
 
+            let token = await refresh()
+
+            if (!token) return
+
             const res = await api.get("/api/doc/newDoc", {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${token}`
                 }
-            })
-
-            setLoading(false)
+            });
 
             if (res.status === 200) {
                 toast.success("Doc Created Successfully", {
@@ -37,7 +41,7 @@ const NewDoc = () => {
             }
 
         } catch (error) {
-            toast.error(error?.response?.data?.msg)
+            toast.error(error?.response?.data?.message)
             setLoading(false)
         }
 
@@ -49,8 +53,8 @@ const NewDoc = () => {
                 {loading === true ? (
                     <>
                         <div className={` ${style.loadingWrapper} container bg-dark border`}></div>
-                        <div class="spinner-border text-primary position-absolute" role="status">
-                            <span class="visually-hidden">Loading...</span>
+                        <div className="spinner-border text-primary position-absolute" role="status">
+                            <span className="visually-hidden">Loading...</span>
                         </div>
                     </>
                 ) : (

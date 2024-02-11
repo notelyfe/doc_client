@@ -38,7 +38,7 @@ const Canva = () => {
             return item.user === userData._id
         })
 
-        if (currentDoc[0]?.created_by === userData._id || usr[0]?.write_permission === true) {
+        if (currentDoc[0]?.created_by === userData?._id || usr[0]?.write_permission === true) {
             quill.enable()
         } else {
             toast.error("You don't have write permission to this document", {
@@ -46,7 +46,7 @@ const Canva = () => {
             })
         }
 
-    }, [allDocs, quill, userData._id, docId])
+    }, [allDocs, quill, userData?._id, docId])
 
     useEffect(() => {
 

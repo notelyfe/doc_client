@@ -29,7 +29,7 @@ const SignUpPage = () => {
         const res = await api.post("/api/auth/createUser", data)
 
         if (res?.status === 200) {
-          toast.success(res?.data?.msg, {
+          toast.success(res?.data?.message, {
             duration: 4000,
           })
           navigate('/login')
@@ -37,7 +37,7 @@ const SignUpPage = () => {
         }
 
       } catch (error) {
-        toast.error(error?.response?.data?.msg, {
+        toast.error(error?.response?.data?.message, {
           duration: 4000,
         })
         setLoading(false)

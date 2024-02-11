@@ -1,20 +1,24 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import style from "../../Style/home.module.css"
 import api from '../../Services/api'
 import toast from 'react-hot-toast'
-import Context from '../../Context/Context'
+import useRefreshToken from "../../Hooks/useRefreshToken"
 
 const Share = ({ setShare, share }) => {
 
     const [email, setEmail] = useState("")
     const [permission, setPermission] = useState(false)
-    const { accessToken } = useContext(Context)
     const [loading, setLoading] = useState(false)
+    const refresh = useRefreshToken()
 
     const shareWith = async () => {
         try {
 
             setLoading(true)
+
+            let token = await refresh()
+
+            if (!token) return
 
             let data = {
                 doc_id: share.id,
@@ -26,19 +30,19 @@ const Share = ({ setShare, share }) => {
 
             const res = await api.post("/api/doc/shareDoc", data, {
                 headers: {
-                    Authorization: `Bearer ${accessToken}`
+                    Authorization: `Bearer ${token}`
                 }
             })
 
             setLoading(false)
 
             if (res.status === 200) {
-                toast.success(res.data.msg)
+                toast.success(res.data.message)
                 setShare({ state: false, id: "" })
             }
 
         } catch (error) {
-            toast.error(error?.response?.data?.msg)
+            toast.error(error?.response?.data?.message)
             setLoading(false)
         }
     }
@@ -71,8 +75,8 @@ const Share = ({ setShare, share }) => {
                     </label>
                 </div>
                 {loading === true ? (
-                    <button class="btn btn-success mx-4 my-2" type="button">
-                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <button className="btn btn-success mx-4 my-2" type="button">
+                        <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                     </button>
                 ) : (
                     <button onClick={shareWith} className="btn btn-success mx-4 my-2">Share</button>

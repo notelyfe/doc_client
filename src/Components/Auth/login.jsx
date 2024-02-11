@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import style from "../../Style/auth.module.css"
 import { Link } from 'react-router-dom'
 
-const Login = ({ data, setData, login, loading }) => {
+const Login = ({ data, setData, login, loading, persist, setPersist }) => {
 
   const [hide, setHide] = useState(false)
 
@@ -46,10 +46,22 @@ const Login = ({ data, setData, login, loading }) => {
           >
             {!hide ? "show" : "hide"}
           </p>
+
+        </div>
+        <div className="mb-3 form-check">
+          <input
+            type="checkbox"
+            name=""
+            id="exampleCheck1"
+            className='form-check-input'
+            onChange={(e) => setPersist(e.target.checked)}
+            value={persist}
+          />
+          <label className='form-check-label' htmlFor="exampleCheck1">Trust this Device</label>
         </div>
         {loading === true ? (
-          <button class="btn btn-primary" type="button">
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <button className="btn btn-primary" type="button">
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           </button>
         ) : (
           <button type="submit" className="btn btn-primary mb-3">Login</button>

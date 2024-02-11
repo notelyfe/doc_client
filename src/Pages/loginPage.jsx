@@ -8,7 +8,7 @@ import Context from '../Context/Context'
 const LoginPage = () => {
 
   const [data, setData] = useState({ email: "", password: "" })
-  const { setAccessToken, setUserData, setAllDocs } = useContext(Context)
+  const { setAccessToken, setUserData, persist, setPersist } = useContext(Context)
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || '/'
@@ -20,8 +20,16 @@ const LoginPage = () => {
 
       setLoading(true)
 
-      const res = await api.post("/api/auth/login", data)
-      setAccessToken(res?.data?.access_token)
+      const res = await api.post("/api/auth/login", data, {
+        headers: {
+          "Content-Type": "application/json"
+        },
+        withCredentials: true
+      })
+      if (res.status === 200) {
+        setAccessToken(res?.data?.access_token)
+        localStorage.setItem("persist", persist)
+      }
 
       const access_token = res?.data?.access_token
 
@@ -38,18 +46,8 @@ const LoginPage = () => {
         setLoading(false)
       }
 
-      const docRes = await api.get("/api/doc/getAllDocs", {
-        headers: {
-          Authorization: `Bearer ${access_token}`
-        }
-      })
-
-      if (docRes.status === 200) {
-        setAllDocs(docRes?.data)
-      }
-
     } catch (error) {
-      toast.error(error?.response?.data?.msg)
+      toast.error(error?.response?.data?.message)
       setLoading(false)
     }
   }
@@ -60,6 +58,8 @@ const LoginPage = () => {
       setData={setData}
       login={login}
       loading={loading}
+      setPersist={setPersist}
+      persist={persist}
     />
   )
 }

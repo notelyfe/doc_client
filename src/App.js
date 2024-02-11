@@ -6,10 +6,12 @@ import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Layout from './Components/layout/Layout';
 import RequireAuth from './Components/RequireAuth/RequireAuth';
+import PersistLogin from './Components/PersistLogin/PersistLogin';
 import Home from "./Pages/HomePage";
 import CanvaPage from './Pages/CanvaPage';
 
 function App() {
+
   return (
     <>
       <Routes>
@@ -19,9 +21,11 @@ function App() {
           <Route path='/login' element={<LoginPage />} />
 
           {/* protected routes */}
-          <Route element={<RequireAuth />}>
-            <Route path='/' element={<Home />} />
-            <Route path='/canva/:name/:docId' element={<CanvaPage />} />
+          <Route element={<PersistLogin />} >
+            <Route element={<RequireAuth />}>
+              <Route path='/' element={<Home />} />
+              <Route path='/canva/:name/:docId' element={<CanvaPage />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

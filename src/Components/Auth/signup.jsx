@@ -78,8 +78,8 @@ const Signup = ({ data, setData, handelRegistration, loading }) => {
           </p>
         </div>
         {loading === true ? (
-          <button class="btn btn-primary" type="button" >
-            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+          <button className="btn btn-primary" type="button" >
+            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           </button>
         ) : (
           <button type="submit" className="btn btn-primary mb-3">Submit</button>

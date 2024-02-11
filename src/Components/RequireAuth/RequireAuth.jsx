@@ -4,11 +4,11 @@ import Context from '../../Context/Context';
 
 const RequireAuth = () => {
 
-    const { userData } = useContext(Context)
+    const { accessToken } = useContext(Context)
     const location = useLocation()
 
     return (
-        userData ? <Outlet />
+        accessToken ? <Outlet />
             : <Navigate to='/login' state={{ from: location }} replace />
     )
 }

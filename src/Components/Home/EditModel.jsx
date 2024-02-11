@@ -3,13 +3,15 @@ import style from '../../Style/home.module.css'
 import Context from '../../Context/Context'
 import api from '../../Services/api'
 import toast from 'react-hot-toast'
+import useRefreshToken from "../../Hooks/useRefreshToken"
 
 const EditModel = ({ setEdit, edit }) => {
 
-    const { allDocs, accessToken } = useContext(Context)
+    const { allDocs } = useContext(Context)
     const [otherOwners, setOtherOwners] = useState(null)
     const [searchText, setSearchText] = useState("")
     const [loading, setLoading] = useState(false)
+    const refresh = useRefreshToken()
 
     useEffect(() => {
         let currentDoc = allDocs?.filter(item => {
@@ -30,9 +32,14 @@ const EditModel = ({ setEdit, edit }) => {
 
     const updatePermission = async (docId, user) => {
         setLoading(true)
+
+        let token = await refresh()
+
+        if (!token) return
+
         const res = await api.patch("/api/doc/editPermission", { docId, user }, {
             headers: {
-                Authorization: `Bearer ${accessToken}`
+                Authorization: `Bearer ${token}`
             }
         })
         setLoading(false)
@@ -73,8 +80,8 @@ const EditModel = ({ setEdit, edit }) => {
                                         </abbr>
                                     </div>
                                     {loading === true ? (
-                                        <button class="btn btn-success" type="button">
-                                            <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                        <button className="btn btn-success" type="button">
+                                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                         </button>
                                     ) : (
                                         <button onClick={() => updatePermission(edit.id, item.user)} className="btn btn-sm btn-success m-1">Update</button>
